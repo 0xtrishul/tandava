@@ -6,17 +6,12 @@ No build step, no backend, no external font/CDN requests.
 ## Structure
 ```
 tandava/                  # -> Cloudflare Pages (code only, no media)
-├── index.html            # markup only — no inline css/js (so CSP can be strict)
+├── index.html            
 ├── _headers              # Cloudflare Pages security headers + CSP
 └── assets/
     ├── style.css         # styles + @font-face
     ├── config.js         # AUDIO_BASE + TRACKS + player + visualizer
-    └── fonts/            # self-hosted JetBrains Mono (OFL)
-
-audio.trishul.re          # -> R2 bucket (the mp3 files live here)
-├── aghori-tantrik-amavasya-tapasya.mp3
-├── za7zay-divine-flame.mp3
-└── ...
+    └── fonts/            # self-hosted JetBrains Mono 
 ```
 
 ## Adding tracks
@@ -29,6 +24,8 @@ audio.trishul.re          # -> R2 bucket (the mp3 files live here)
   license: "CC BY-NC-SA", source: "Ektoplazm" }
 ```
 The license / source / artist fields auto-populate the CC attribution block.
+
+
 
 ## Security posture
 - **No external requests from the page** — font self-hosted; only the audio comes from R2.

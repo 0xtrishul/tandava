@@ -2,33 +2,45 @@
    TRACKS — edit this array. Audio is served from R2 (AUDIO_BASE).
    Upload each mp3 to the bucket bound to https://audio.trishul.re
    Every field feeds the UI and the CC attribution block.
-   Curated Creative Commons picks (Ektoplazm, non-commercial use).
-   Confirm each release's exact licence on its download page.
    ───────────────────────────────────────────────────────────── */
-const AUDIO_BASE = "https://audio.trishul.re";
+const AUDIO_BASE = "https://audio.trishul.re/Music/";
 
 const TRACKS = [
-  { title: "Amavasya Tapasya", artist: "Aghori Tantrik", bpm: 180,
-    file: "aghori-tantrik-amavasya-tapasya.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "Divine Flame", artist: "ZA7ZAY", bpm: 153,
-    file: "za7zay-divine-flame.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "Kali Om Jayanti", artist: "Pixie Freak", bpm: 150,
-    file: "pixie-freak-kali-om-jayanti.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "Hypnotic Ritual", artist: "Dar Kapo", bpm: 153,
-    file: "dar-kapo-hypnotic-ritual.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "Hypnotizer", artist: "Synthetic Forest", bpm: 176,
-    file: "synthetic-forest-hypnotizer.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "Event Horizon", artist: "Hypnotoad", bpm: 180,
-    file: "hypnotoad-event-horizon.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
-  { title: "The Sound", artist: "Phreneticus", bpm: 220,
-    file: "phreneticus-the-sound.mp3",
-    license: "CC BY-NC-SA", source: "Ektoplazm" },
+  {
+    title: "Adagio For Broken Strings", artist: " Varazslo, Vutt'un", bpm: 180,
+    file: "Adagio_For_Broken_Strings.mp3",
+    source: "Naturaiz Records"
+  },
+  {
+    title: "Black Yoga", artist: "Necropsycho", bpm: 153,
+    file: "Black_Yoga.mp3",
+    source: "Yellow Sunshine Explosion"
+  },
+  {
+    title: "Elohim Namah", artist: "Depuratus", bpm: 150,
+    file: "Elohim_Namah.mp3",
+    source: "Abstract Meditation Crew"
+  },
+  {
+    title: "Mother Of Everything", artist: "Varaboro", bpm: 180,
+    file: "Mother_Of_Everything.mp3",
+    source: "Self-Release"
+  },
+  {
+    title: "Giove", artist: "Sectio Aurea", bpm: 176,
+    file: "Giove.mp3",
+    source: "Argot Digamma Music"
+  },
+  {
+    title: "You Are Not A Fish", artist: "Der Sandmann", bpm: 180,
+    file: "You_Are_Not_A_Fish.mp3",
+    source: "ANOMALISTIC REC"
+  },
+  {
+    title: "Papillon Noir", artist: "Oroboro", bpm: 194.7,
+    file: "Papillon_Noir.mp3",
+    source: "Self-Release"
+  },
 ].map(t => ({ ...t, src: `${AUDIO_BASE}/${t.file}` }));
 
 /* ── player ── */
@@ -66,11 +78,10 @@ TRACKS.forEach((t, i) => {
   rowsEl.appendChild(row);
 });
 
-/* attribution block (CC compliance) — built with DOM nodes, not innerHTML */
-(function buildCredit(){
+(function buildCredit() {
   const c = $('credit');
   const head = document.createElement('div');
-  head.textContent = 'sounds under Creative Commons, non-commercial use · credit preserved per licence:';
+  head.textContent = 'Non-commercial use · credit preserved per licence:';
   c.appendChild(head);
   TRACKS.forEach(t => {
     const line = document.createElement('div');
@@ -78,18 +89,18 @@ TRACKS.forEach((t, i) => {
     c.appendChild(line);
   });
   const link = document.createElement('a');
-  link.href = 'https://ektoplazm.com';
+  link.href = 'https://trishul.re';
   link.target = '_blank'; link.rel = 'noopener noreferrer';
-  link.textContent = 'ektoplazm.com';
+  link.textContent = 'trishul.re';
   const foot = document.createElement('div');
-  foot.append(link, document.createTextNode(' — free & legal psytrance'));
+  foot.append(link, document.createTextNode(' — har har mahadev'));
   c.appendChild(foot);
 })();
 
-function fmt(s){ if(isNaN(s)) return "0:00"; const m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+String(r).padStart(2,'0'); }
+function fmt(s) { if (isNaN(s)) return "0:00"; const m = Math.floor(s / 60), r = Math.floor(s % 60); return m + ":" + String(r).padStart(2, '0'); }
 
-function initAudioGraph(){
-  if(ac) return;
+function initAudioGraph() {
+  if (ac) return;
   ac = new (window.AudioContext || window.webkitAudioContext)();
   analyser = ac.createAnalyser();
   analyser.fftSize = 256;
@@ -100,7 +111,7 @@ function initAudioGraph(){
   analyser.connect(ac.destination);
 }
 
-function load(i, autoplay){
+function load(i, autoplay) {
   idx = i;
   const t = TRACKS[i];
   audio.src = t.src;
@@ -108,51 +119,51 @@ function load(i, autoplay){
   $('npTitle').textContent = t.title;
   $('npArtist').textContent = `${t.artist} · ${t.bpm} bpm · ${t.license}`;
   [...rowsEl.children].forEach(r => r.classList.toggle('active', +r.dataset.i === i));
-  if(autoplay) play();
+  if (autoplay) play();
 }
 
-async function play(){
-  if(idx === -1) return load(0, true);
+async function play() {
+  if (idx === -1) return load(0, true);
   initAudioGraph();
-  if(ac.state === 'suspended') await ac.resume();
-  try { await audio.play(); } catch(e){ /* blocked until gesture */ }
+  if (ac.state === 'suspended') await ac.resume();
+  try { await audio.play(); } catch (e) { /* blocked until gesture */ }
 }
-function pause(){ audio.pause(); }
+function pause() { audio.pause(); }
 
 $('play').onclick = () => audio.paused ? play() : pause();
-$('prev').onclick = () => load((idx<=0 ? TRACKS.length : idx) - 1, true);
-$('next').onclick = () => load((idx+1) % TRACKS.length, true);
+$('prev').onclick = () => load((idx <= 0 ? TRACKS.length : idx) - 1, true);
+$('next').onclick = () => load((idx + 1) % TRACKS.length, true);
 
-audio.addEventListener('play',  () => { playIcon.setAttribute('d', PAUSE); $('play').setAttribute('aria-label','pause'); if(!rafId) draw(); });
-audio.addEventListener('pause', () => { playIcon.setAttribute('d', PLAY);  $('play').setAttribute('aria-label','play'); });
+audio.addEventListener('play', () => { playIcon.setAttribute('d', PAUSE); $('play').setAttribute('aria-label', 'pause'); if (!rafId) draw(); });
+audio.addEventListener('pause', () => { playIcon.setAttribute('d', PLAY); $('play').setAttribute('aria-label', 'play'); });
 audio.addEventListener('ended', () => $('next').click());
 audio.addEventListener('loadedmetadata', () => $('dur').textContent = fmt(audio.duration));
 audio.addEventListener('timeupdate', () => {
-  const p = audio.duration ? (audio.currentTime/audio.duration)*100 : 0;
-  fillEl.style.width = p+'%'; knobEl.style.left = p+'%';
+  const p = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+  fillEl.style.width = p + '%'; knobEl.style.left = p + '%';
   $('cur').textContent = fmt(audio.currentTime);
   $('track').setAttribute('aria-valuenow', Math.round(p));
 });
 
 /* seek */
 const trackEl = $('track');
-function seekTo(clientX){
+function seekTo(clientX) {
   const r = trackEl.getBoundingClientRect();
-  const p = Math.min(1, Math.max(0, (clientX - r.left)/r.width));
-  if(audio.duration) audio.currentTime = p*audio.duration;
+  const p = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+  if (audio.duration) audio.currentTime = p * audio.duration;
 }
 trackEl.addEventListener('click', e => seekTo(e.clientX));
 trackEl.addEventListener('keydown', e => {
-  if(!audio.duration) return;
-  if(e.key==='ArrowRight') audio.currentTime = Math.min(audio.duration, audio.currentTime+5);
-  if(e.key==='ArrowLeft')  audio.currentTime = Math.max(0, audio.currentTime-5);
+  if (!audio.duration) return;
+  if (e.key === 'ArrowRight') audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+  if (e.key === 'ArrowLeft') audio.currentTime = Math.max(0, audio.currentTime - 5);
 });
 
-$('vol').addEventListener('input', e => audio.volume = e.target.value/100);
+$('vol').addEventListener('input', e => audio.volume = e.target.value / 100);
 
 /* keyboard: space = play/pause */
 document.addEventListener('keydown', e => {
-  if(e.code==='Space' && e.target.tagName!=='INPUT'){ e.preventDefault(); audio.paused?play():pause(); }
+  if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); audio.paused ? play() : pause(); }
 });
 
 /* ── the prabhamandala: radial spectrum, still centre, ring of fire ── */
@@ -160,58 +171,58 @@ const cv = $('viz'), cx = cv.getContext('2d');
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const CX = 240, CY = 240, R0 = 74;   // inner radius (the still centre)
 
-function draw(){
+function draw() {
   rafId = requestAnimationFrame(draw);
-  cx.clearRect(0,0,480,480);
+  cx.clearRect(0, 0, 480, 480);
 
   let level = 0;
-  if(analyser){ analyser.getByteFrequencyData(freq); }
+  if (analyser) { analyser.getByteFrequencyData(freq); }
 
   const bins = 96;
-  const step = (Math.PI*2)/bins;
-  for(let i=0;i<bins;i++){
-    const fi = Math.floor((i<bins/2 ? i : bins-1-i) / (bins/2) * (analyser? freq.length*0.7 : 1));
-    const v = analyser ? freq[fi]/255 : 0;
+  const step = (Math.PI * 2) / bins;
+  for (let i = 0; i < bins; i++) {
+    const fi = Math.floor((i < bins / 2 ? i : bins - 1 - i) / (bins / 2) * (analyser ? freq.length * 0.7 : 1));
+    const v = analyser ? freq[fi] / 255 : 0;
     level += v;
-    const len = R0 + v*v*96 + 4;
-    const a = -Math.PI/2 + i*step;
-    const x0 = CX + Math.cos(a)*R0, y0 = CY + Math.sin(a)*R0;
-    const x1 = CX + Math.cos(a)*len, y1 = CY + Math.sin(a)*len;
-    const g = cx.createLinearGradient(x0,y0,x1,y1);
+    const len = R0 + v * v * 96 + 4;
+    const a = -Math.PI / 2 + i * step;
+    const x0 = CX + Math.cos(a) * R0, y0 = CY + Math.sin(a) * R0;
+    const x1 = CX + Math.cos(a) * len, y1 = CY + Math.sin(a) * len;
+    const g = cx.createLinearGradient(x0, y0, x1, y1);
     g.addColorStop(0, '#5a1414');
-    g.addColorStop(1, v>0.55 ? '#e23b3b' : '#9e1d1d');
+    g.addColorStop(1, v > 0.55 ? '#e23b3b' : '#9e1d1d');
     cx.strokeStyle = g;
     cx.lineWidth = 2.4;
     cx.lineCap = 'round';
-    cx.beginPath(); cx.moveTo(x0,y0); cx.lineTo(x1,y1); cx.stroke();
+    cx.beginPath(); cx.moveTo(x0, y0); cx.lineTo(x1, y1); cx.stroke();
   }
-  level = level/bins;
+  level = level / bins;
 
-  const pulse = reduce ? 0 : level*10;
+  const pulse = reduce ? 0 : level * 10;
   cx.beginPath();
-  cx.arc(CX, CY, R0-8+pulse, 0, Math.PI*2);
-  cx.strokeStyle = 'rgba(158,29,29,'+(0.35+level*0.5)+')';
+  cx.arc(CX, CY, R0 - 8 + pulse, 0, Math.PI * 2);
+  cx.strokeStyle = 'rgba(158,29,29,' + (0.35 + level * 0.5) + ')';
   cx.lineWidth = 1.5; cx.stroke();
 
   cx.beginPath();
-  cx.arc(CX, CY, 4+pulse*0.4, 0, Math.PI*2);
+  cx.arc(CX, CY, 4 + pulse * 0.4, 0, Math.PI * 2);
   cx.fillStyle = '#e23b3b';
   cx.fill();
 
-  if(audio.paused && level < 0.01){ cancelAnimationFrame(rafId); rafId=null; drawIdle(); }
+  if (audio.paused && level < 0.01) { cancelAnimationFrame(rafId); rafId = null; drawIdle(); }
 }
-function drawIdle(){
-  cx.clearRect(0,0,480,480);
-  const bins=96, step=(Math.PI*2)/bins;
-  for(let i=0;i<bins;i++){
-    const a=-Math.PI/2+i*step;
-    const x0=CX+Math.cos(a)*R0, y0=CY+Math.sin(a)*R0;
-    const x1=CX+Math.cos(a)*(R0+4), y1=CY+Math.sin(a)*(R0+4);
-    cx.strokeStyle='#2a1010'; cx.lineWidth=2.4; cx.lineCap='round';
-    cx.beginPath(); cx.moveTo(x0,y0); cx.lineTo(x1,y1); cx.stroke();
+function drawIdle() {
+  cx.clearRect(0, 0, 480, 480);
+  const bins = 96, step = (Math.PI * 2) / bins;
+  for (let i = 0; i < bins; i++) {
+    const a = -Math.PI / 2 + i * step;
+    const x0 = CX + Math.cos(a) * R0, y0 = CY + Math.sin(a) * R0;
+    const x1 = CX + Math.cos(a) * (R0 + 4), y1 = CY + Math.sin(a) * (R0 + 4);
+    cx.strokeStyle = '#2a1010'; cx.lineWidth = 2.4; cx.lineCap = 'round';
+    cx.beginPath(); cx.moveTo(x0, y0); cx.lineTo(x1, y1); cx.stroke();
   }
-  cx.beginPath(); cx.arc(CX,CY,R0-8,0,Math.PI*2);
-  cx.strokeStyle='rgba(158,29,29,.25)'; cx.lineWidth=1.5; cx.stroke();
-  cx.beginPath(); cx.arc(CX,CY,4,0,Math.PI*2); cx.fillStyle='#9e1d1d'; cx.fill();
+  cx.beginPath(); cx.arc(CX, CY, R0 - 8, 0, Math.PI * 2);
+  cx.strokeStyle = 'rgba(158,29,29,.25)'; cx.lineWidth = 1.5; cx.stroke();
+  cx.beginPath(); cx.arc(CX, CY, 4, 0, Math.PI * 2); cx.fillStyle = '#9e1d1d'; cx.fill();
 }
 drawIdle();
