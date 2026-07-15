@@ -3,7 +3,7 @@
    Upload each mp3 to the bucket bound to https://audio.trishul.re
    Every field feeds the UI and the CC attribution block.
    ───────────────────────────────────────────────────────────── */
-const AUDIO_BASE = "https://audio.trishul.re/Music/";
+const AUDIO_BASE = "https://audio.trishul.re/Music";
 
 const TRACKS = [
   {
