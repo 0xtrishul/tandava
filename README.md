@@ -14,19 +14,6 @@ tandava/                  # -> Cloudflare Pages (code only, no media)
     └── fonts/            # self-hosted JetBrains Mono 
 ```
 
-## Adding tracks
-1. Upload the mp3 to the R2 bucket bound to https://audio.trishul.re
-2. Add an entry to the `TRACKS` array in `assets/config.js` — note it takes `file`
-   (just the filename); the full URL is built from `AUDIO_BASE`:
-```js
-{ title: "Amavasya Tapasya", artist: "Aghori Tantrik", bpm: 180,
-  file: "aghori-tantrik-amavasya-tapasya.mp3",
-  license: "CC BY-NC-SA", source: "Ektoplazm" }
-```
-The license / source / artist fields auto-populate the CC attribution block.
-
-
-
 ## Security posture
 - **No external requests from the page** — font self-hosted; only the audio comes from R2.
 - **Strict CSP**: default-src 'none'; script/style/font/img = 'self';
