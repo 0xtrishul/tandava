@@ -12,32 +12,32 @@ const TRACKS = [
     source: "Naturaiz Records"
   },
   {
-    title: "Black Yoga", artist: "Necropsycho", bpm: 153,
+    title: "Black Yoga", artist: " Necropsycho", bpm: 153,
     file: "Black_Yoga.mp3",
     source: "Yellow Sunshine Explosion"
   },
   {
-    title: "Elohim Namah", artist: "Depuratus", bpm: 150,
+    title: "Elohim Namah", artist: " Depuratus", bpm: 150,
     file: "Elohim_Namah.mp3",
     source: "Abstract Meditation Crew"
   },
   {
-    title: "Mother Of Everything", artist: "Varaboro", bpm: 180,
+    title: "Mother Of Everything", artist: " Varaboro", bpm: 180,
     file: "Mother_Of_Everything.mp3",
     source: "Self-Release"
   },
   {
-    title: "Giove", artist: "Sectio Aurea", bpm: 176,
+    title: "Giove", artist: " Sectio Aurea", bpm: 176,
     file: "Giove.mp3",
     source: "Argot Digamma Music"
   },
   {
-    title: "You Are Not A Fish", artist: "Der Sandmann", bpm: 180,
+    title: "You Are Not A Fish", artist: " Der Sandmann", bpm: 180,
     file: "You_Are_Not_A_Fish.mp3",
     source: "ANOMALISTIC REC"
   },
   {
-    title: "Papillon Noir", artist: "Oroboro", bpm: 194.7,
+    title: "Papillon Noir", artist: " Oroboro", bpm: 194.7,
     file: "Papillon_Noir.mp3",
     source: "Self-Release"
   },
@@ -85,7 +85,7 @@ TRACKS.forEach((t, i) => {
   c.appendChild(head);
   TRACKS.forEach(t => {
     const line = document.createElement('div');
-    line.textContent = `${t.artist} — “${t.title}” · ${t.license} · via ${t.source}`;
+    line.textContent = `${t.artist} — “${t.title}” · via ${t.source}`;
     c.appendChild(line);
   });
   const link = document.createElement('a');
@@ -117,7 +117,7 @@ function load(i, autoplay) {
   audio.src = t.src;
   $('idle').hidden = true; $('np').hidden = false;
   $('npTitle').textContent = t.title;
-  $('npArtist').textContent = `${t.artist} · ${t.bpm} bpm · ${t.license}`;
+  $('npArtist').textContent = `${t.artist} · ${t.bpm} bpm`;
   [...rowsEl.children].forEach(r => r.classList.toggle('active', +r.dataset.i === i));
   if (autoplay) play();
 }
